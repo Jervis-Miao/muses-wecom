@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.muses.wework.config.WxCpConfig;
-import cn.muses.wework.exceptions.QwException;
+import cn.muses.wework.exceptions.WeworkException;
 import cn.muses.wework.utils.JsonMapper;
 import me.chanjar.weixin.cp.api.WxCpService;
 import me.chanjar.weixin.cp.bean.message.WxCpXmlMessage;
@@ -44,12 +44,12 @@ public class WxPortalController {
             signature, timestamp, nonce, echostr);
 
         if (StringUtils.isAnyBlank(signature, timestamp, nonce, echostr)) {
-            throw new QwException("请求参数非法，请核实!");
+            throw new WeworkException("请求参数非法，请核实!");
         }
 
         final WxCpService wxCpService = WxCpConfig.getCpService(agentId);
         if (wxCpService == null) {
-            throw new QwException(String.format("未找到对应agentId=[%d]的配置，请核实！", agentId));
+            throw new WeworkException(String.format("未找到对应agentId=[%d]的配置，请核实！", agentId));
         }
 
         if (wxCpService.checkSignature(signature, timestamp, nonce, echostr)) {
