@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns="http://www.chaos.com/logback.xsd" scan="true" scanPeriod="30 seconds">
+
+    <contextName>muses-qw</contextName>
+
+    <!--控制台输出-->
+    <appender name="CONSOLE-APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} ["%thread"] [%p] %c#%M - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 基logger -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE-APPENDER"/>
+    </root>
+
+    <!-- 指定logger -->
+    <logger name="cn.muses.wework" level="INFO" additivity="FALSE">
+        <appender-ref ref="CONSOLE-APPENDER"/>
+    </logger>
+
+</configuration>

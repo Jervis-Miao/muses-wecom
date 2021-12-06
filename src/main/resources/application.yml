@@ -1,0 +1,31 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: orpheus
+
+logging:
+  config: classpath:logback-spring.xml
+
+wechat:
+  cp:
+    ## 测试账号
+    corpId: wwa5dfecfb3d087240
+    appConfigs:
+      - agentId: 1000000
+        secret: b55GXJzU0MnrTIyj_PDSgGBewZ7psna1G3d6e-6HnLQ
+        token: E7HdNE0sudPCgRK1R9Z3JOnxBQszv4G
+        aesKey: zaUwJ7s8DmelAzNPVecODs7MoNoMue2t39SFfWfBzzF
+      - agentId: 1000002
+        secret: GLBsR2CPvGfnOsLKZhe6CQaGft_trjsvzyjQ59bMO0U
+        token: aJ5n8ygxvVTvNq8oT7Ug920tF1gxZb
+        aesKey: dMoL5EaZnOiBy58W0NHrknsUEiEPMmhsn4mJIY8XnV9
+
+  ## 公司账号
+  #    corp-id: wwed6c5625a8ab6a30
+  #    app-configs:
+  #      - agent-id: 1000026
+  #        secret: mVniGBTkw_01ugchOyXCM9oGWi3DuOabX8kXjZPp7Z8
+  #        token: BivNUgH4292OtLkMMf0ocP0WxF83
+  #        aesKey: Qnk2IhVx4xGzLIi4x7FxNeQ7knHSMqxBd1eKL40aJHs
