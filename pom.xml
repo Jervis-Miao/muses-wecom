@@ -19,6 +19,8 @@
         <fst.version>2.57</fst.version>
         <netty.version>4.1.27.Final</netty.version>
         <weixin-java-cp.version>4.2.0</weixin-java-cp.version>
+        <bouncycastle.version>1.68</bouncycastle.version>
+        <apollo-config.version>1.0.0-SNAPSHOT</apollo-config.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
@@ -37,6 +39,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <!-- ==================config==================== -->
+        <dependency>
+            <groupId>com.ctrip.framework.apollo</groupId>
+            <artifactId>apollo-client</artifactId>
+            <version>${apollo-config.version}</version>
         </dependency>
 
         <!-- AOP -->
@@ -76,11 +85,35 @@
             <artifactId>jackson-module-jaxb-annotations</artifactId>
         </dependency>
 
-        <!-- tools -->
+        <!-- apache-commons -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.4</version>
+        </dependency>
+
+        <!-- RSA PKCS1解密支持 -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>${bouncycastle.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpg-jdk15on</artifactId>
+            <version>${bouncycastle.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>${bouncycastle.version}</version>
+        </dependency>
+
+        <!-- 阿里JSON解析器 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.56</version>
         </dependency>
 
         <!-- weixin -->

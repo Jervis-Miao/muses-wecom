@@ -4,15 +4,18 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author jervis
  * @date 2021-11-30
  */
+@Configuration
 @ConfigurationProperties(prefix = "wechat.cp")
 public class WxCpProperties {
+
     /**
-     * 设置企业微信的corpId
+     * 企业微信的corpId
      */
     private String corpId;
 
