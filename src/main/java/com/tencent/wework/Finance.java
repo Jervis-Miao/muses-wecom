@@ -1,6 +1,6 @@
 package com.tencent.wework;
 
-import cn.muses.wework.utils.OsUtils;
+import cn.muses.wecom.utils.OsUtils;
 
 /**
  * sdk返回数据

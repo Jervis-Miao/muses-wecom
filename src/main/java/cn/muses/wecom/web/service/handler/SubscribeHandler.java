@@ -1,0 +1,69 @@
+package cn.muses.wecom.web.service.handler;
+
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
+
+import cn.muses.wecom.builder.TextBuilder;
+import me.chanjar.weixin.common.api.WxConsts;
+import me.chanjar.weixin.common.error.WxErrorException;
+import me.chanjar.weixin.common.session.WxSessionManager;
+import me.chanjar.weixin.cp.api.WxCpService;
+import me.chanjar.weixin.cp.bean.WxCpUser;
+import me.chanjar.weixin.cp.bean.message.WxCpXmlMessage;
+import me.chanjar.weixin.cp.bean.message.WxCpXmlOutMessage;
+
+/**
+ * 关注事件
+ *
+ * @author jervis
+ * @date 2021-11-30
+ */
+@Component
+public class SubscribeHandler extends AbstractWxCpMessageHandler {
+
+    public SubscribeHandler() {
+        super(new RouterStrategy(WxConsts.EventType.SUBSCRIBE));
+    }
+
+    @Override
+    public WxCpXmlOutMessage handle(WxCpXmlMessage wxMessage, Map<String, Object> context, WxCpService cpService,
+        WxSessionManager sessionManager) throws WxErrorException {
+
+        this.logger.info("新关注用户 OPENID: " + wxMessage.getFromUserName());
+
+        // 获取微信用户基本信息
+        WxCpUser userWxInfo = cpService.getUserService().getById(wxMessage.getFromUserName());
+
+        if (userWxInfo != null) {
+            // TODO 可以添加关注用户到本地
+        }
+
+        WxCpXmlOutMessage responseResult = null;
+        try {
+            responseResult = handleSpecial(wxMessage);
+        } catch (Exception e) {
+            this.logger.error(e.getMessage(), e);
+        }
+
+        if (responseResult != null) {
+            return responseResult;
+        }
+
+        try {
+            return new TextBuilder().build("感谢关注", wxMessage, cpService);
+        } catch (Exception e) {
+            this.logger.error(e.getMessage(), e);
+        }
+
+        return null;
+    }
+
+    /**
+     * 处理特殊请求，比如如果是扫码进来的，可以做相应处理
+     */
+    private WxCpXmlOutMessage handleSpecial(WxCpXmlMessage wxMessage) {
+        // TODO
+        return null;
+    }
+}
