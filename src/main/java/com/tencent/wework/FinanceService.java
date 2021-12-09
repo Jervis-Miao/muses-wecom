@@ -18,9 +18,9 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import cn.muses.wework.utils.DateUtils;
-import cn.muses.wework.utils.IdUtils;
-import cn.muses.wework.utils.RsaUtils;
+import cn.muses.wecom.utils.DateUtils;
+import cn.muses.wecom.utils.IdUtils;
+import cn.muses.wecom.utils.RsaUtils;
 
 /**
  * @author miaoqiang

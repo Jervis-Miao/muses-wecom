@@ -16,7 +16,7 @@
     </root>
 
     <!-- 指定logger -->
-    <logger name="cn.muses.wework" level="INFO" additivity="FALSE">
+    <logger name="cn.muses.wecom" level="INFO" additivity="FALSE">
         <appender-ref ref="CONSOLE-APPENDER"/>
     </logger>
 
