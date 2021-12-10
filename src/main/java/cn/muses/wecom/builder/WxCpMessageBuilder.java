@@ -49,7 +49,7 @@ public class WxCpMessageBuilder {
             .toParty("2")
             .title("领奖通知")
             .description(
-                "恭喜你获得iPhone 13抽奖机会一次，抽奖码：" + new Random().nextInt(999999) % 900000 + 100000
+                "恭喜你获得iPhone 13抽奖机会一次，抽奖码：" + (new Random().nextInt(999999) % 900000 + 100000)
                     + "\n请于2021年12月12日前点击领奖按钮抽取！")
             .url("https://www.xyz.cn")
             .buttons(Arrays.asList(TaskCardButton.builder()
