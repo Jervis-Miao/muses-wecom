@@ -4,6 +4,7 @@
 package cn.muses.wecom.builder;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import me.chanjar.weixin.cp.bean.article.NewArticle;
 import me.chanjar.weixin.cp.bean.message.WxCpMessage;
@@ -44,24 +45,26 @@ public class WxCpMessageBuilder {
      */
     public static WxCpMessage buildTaskCard() {
         final WxCpMessage message = WxCpMessage.TASKCARD()
-                .taskId(String.valueOf(System.currentTimeMillis()))
-                .toParty("2")
-                .title("领奖通知")
-                .description("恭喜你获得iPhone 13抽奖机会一次，抽奖码：123456\n请于2021年12月12日前点击领奖按钮抽取！")
-                .url("https://www.xyz.cn")
-                .buttons(Arrays.asList(TaskCardButton.builder()
-                                .key("111")
-                                .color("orange")
-                                .name("点击领奖")
-                                .bold(Boolean.TRUE)
-                                .build(),
-                        TaskCardButton.builder()
-                                .key("222")
-                                .color("orange")
-                                .name("忍痛割爱")
-                                .bold(Boolean.TRUE)
-                                .build()))
-                .build();
+            .taskId(String.valueOf(System.currentTimeMillis()))
+            .toParty("2")
+            .title("领奖通知")
+            .description(
+                "恭喜你获得iPhone 13抽奖机会一次，抽奖码：" + new Random().nextInt(999999) % 900000 + 100000
+                    + "\n请于2021年12月12日前点击领奖按钮抽取！")
+            .url("https://www.xyz.cn")
+            .buttons(Arrays.asList(TaskCardButton.builder()
+                .key("111")
+                .color("orange")
+                .name("点击领奖")
+                .bold(Boolean.TRUE)
+                .build(),
+                TaskCardButton.builder()
+                    .key("222")
+                    .color("orange")
+                    .name("忍痛割爱")
+                    .bold(Boolean.TRUE)
+                    .build()))
+            .build();
         return message;
     }
 }

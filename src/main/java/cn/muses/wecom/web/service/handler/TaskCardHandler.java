@@ -39,7 +39,7 @@ public class TaskCardHandler extends AbstractWxCpMessageHandler {
         if (wxMessage.getEventKey().equals("222")) {
             msg = "很遗憾，您选择了不抽取奖品！";
         } else {
-            if (System.currentTimeMillis() % 5 == 0) {
+            if (System.currentTimeMillis() % 3 == 0) {
                 msg = "恭喜，您中奖啦！";
             } else {
                 msg = "很遗憾，您与奖品擦肩而过！";
