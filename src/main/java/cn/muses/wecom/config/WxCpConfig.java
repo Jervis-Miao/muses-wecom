@@ -1,14 +1,17 @@
 package cn.muses.wecom.config;
 
+import java.beans.Introspector;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RedissonClient;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
 
 import com.google.common.collect.Maps;
@@ -33,31 +36,60 @@ import me.chanjar.weixin.cp.tp.service.impl.WxCpTpServiceImpl;
  * @date 2021-11-30
  */
 @Configuration
-public class WxCpConfig {
+public class WxCpConfig implements ApplicationContextAware {
     private static final String REDIS_KEY_PREFIX = "wework:";
 
     @Autowired
-    public RedissonClient redisson;
-
     private WxCpProperties properties;
+
+    @Autowired
     private List<AbstractWxCpMessageHandler> handlers;
+
+    @Autowired
+    private RedissonClient redisson;
 
     /**
      * agentId -> WxCpMessageRouter|WxCpService|WxCpTpService<br/>
-     * routers 服务路由<br/>
      * cpServices 企业微信API的服务<br/>
+     * routers 服务路由<br/>
      * tpServices 企业微信第三方应用API的服务<br/>
      * cpOnTpServices 微信API配合第三方应用的服务<br/>
      */
-    private static Map<Integer, WxCpMessageRouter> routers = Maps.newHashMap();
     private static Map<Integer, WxCpService> cpServices = Maps.newHashMap();
+    private static Map<Integer, WxCpMessageRouter> routers = Maps.newHashMap();
     private static Map<Integer, WxCpTpService> tpServices = Maps.newHashMap();
     private static Map<Integer, WxCpService> cpOnTpServices = Maps.newHashMap();
 
-    @Autowired
-    public WxCpConfig(List<AbstractWxCpMessageHandler> handlers, WxCpProperties properties) {
-        this.handlers = handlers;
-        this.properties = properties;
+    @Override
+    public void setApplicationContext(ApplicationContext context) throws BeansException {
+        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory)context.getAutowireCapableBeanFactory();
+        for (WxCpProperties.AppConfig a : properties.getAppConfigs()) {
+            val agentId = a.getAgentId();
+            val configStorage = new WxCpRedissonConfigImpl(redisson, REDIS_KEY_PREFIX);
+            configStorage.setCorpId(properties.getCorpId());
+            configStorage.setAgentId(agentId);
+            configStorage.setCorpSecret(a.getSecret());
+            configStorage.setToken(a.getToken());
+            configStorage.setAesKey(a.getAesKey());
+
+            // 微信API的Service.
+            val service = new WxCpServiceImpl();
+            service.setWxCpConfigStorage(configStorage);
+            // 将微信API服务注册到Spring容器中
+            beanFactory.registerSingleton(Introspector.decapitalize(WxCpService.class.getSimpleName()) + "-" + agentId,
+                service);
+            cpServices.put(agentId, service);
+            routers.put(agentId, this.newRouter(service));
+
+            // 企业微信第三方应用API的Service.
+            val tpService = new WxCpTpServiceImpl();
+            tpService.setWxCpTpConfigStorage(
+                WxCpTpRedissonConfigImpl.builder().wxRedisOps(new RedissonWxRedisOps(redisson)).build());
+            tpServices.put(agentId, tpService);
+
+            // 微信API的Service, 配合第三方应用service使用
+            cpOnTpServices.put(agentId, new WxCpServiceOnTpImpl(tpService));
+        }
     }
 
     /**
@@ -97,37 +129,6 @@ public class WxCpConfig {
      */
     public static WxCpService getCpOnTpService(Integer agentId) {
         return cpOnTpServices.get(agentId);
-    }
-
-    /**
-     * 初始化服务
-     */
-    @PostConstruct
-    public void initServices() {
-        for (WxCpProperties.AppConfig a : this.properties.getAppConfigs()) {
-            val agentId = a.getAgentId();
-            val configStorage = new WxCpRedissonConfigImpl(redisson, REDIS_KEY_PREFIX);
-            configStorage.setCorpId(this.properties.getCorpId());
-            configStorage.setAgentId(agentId);
-            configStorage.setCorpSecret(a.getSecret());
-            configStorage.setToken(a.getToken());
-            configStorage.setAesKey(a.getAesKey());
-
-            // 微信API的Service.
-            val service = new WxCpServiceImpl();
-            service.setWxCpConfigStorage(configStorage);
-            routers.put(agentId, this.newRouter(service));
-            cpServices.put(agentId, service);
-
-            // 企业微信第三方应用API的Service.
-            val tpService = new WxCpTpServiceImpl();
-            tpService.setWxCpTpConfigStorage(
-                WxCpTpRedissonConfigImpl.builder().wxRedisOps(new RedissonWxRedisOps(redisson)).build());
-            tpServices.put(agentId, tpService);
-
-            // 微信API的Service, 配合第三方应用service使用
-            cpOnTpServices.put(agentId, new WxCpServiceOnTpImpl(tpService));
-        }
     }
 
     /**

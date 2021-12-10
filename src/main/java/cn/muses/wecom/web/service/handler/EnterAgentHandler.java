@@ -28,8 +28,10 @@ public class EnterAgentHandler extends AbstractWxCpMessageHandler {
     public WxCpXmlOutMessage handle(WxCpXmlMessage wxMessage, Map<String, Object> context, WxCpService wxCpService,
         WxSessionManager sessionManager) throws WxErrorException {
         // do something
-        return WxCpXmlOutMessage.TEXT().content("欢迎进入test应用！！！")
-            .fromUser(wxMessage.getToUserName()).toUser(wxMessage.getFromUserName())
-            .build();
+        logger.info("用户: {}, 进入了应用: {}", wxMessage.getFromUserName(), wxMessage.getAgentId());
+        // return WxCpXmlOutMessage.TEXT().content("欢迎进入test应用！！！")
+        // .fromUser(wxMessage.getToUserName()).toUser(wxMessage.getFromUserName())
+        // .build();
+        return null;
     }
 }

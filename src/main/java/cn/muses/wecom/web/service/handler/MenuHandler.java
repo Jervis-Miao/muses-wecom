@@ -21,7 +21,7 @@ import me.chanjar.weixin.cp.bean.message.WxCpXmlOutMessage;
 public class MenuHandler extends AbstractWxCpMessageHandler {
 
     public MenuHandler() {
-        super(new RouterStrategy(WxConsts.XmlMsgType.EVENT, WxConsts.MenuButtonType.CLICK));
+        super(new RouterStrategy(WxConsts.MenuButtonType.CLICK));
     }
 
     @Override
