@@ -71,6 +71,8 @@ public class RedissonConfig {
     private int database;
     @Value("${redis.sentinel.default.subscriptionsPerConnection}")
     private int subscriptionsPerConnection;
+    @Value("${redis.sentinel.default.password}")
+    private String pwd;
 
     @Bean("fstCodec")
     public FstCodec fstCodec() {
@@ -115,6 +117,7 @@ public class RedissonConfig {
         sentinelServersConfig.setFailedSlaveCheckInterval(failedSlaveCheckInterval);
         sentinelServersConfig.setDatabase(database);
         sentinelServersConfig.setSubscriptionsPerConnection(subscriptionsPerConnection);
+        sentinelServersConfig.setPassword(pwd);
         // 序列化方式
         config.setCodec(codec);
         return Redisson.create(config);

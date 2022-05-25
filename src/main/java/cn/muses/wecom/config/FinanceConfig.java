@@ -19,19 +19,19 @@ public class FinanceConfig {
     /**
      * 会话存档密钥
      */
-    @Value("${wechat.finance.secret}")
+    @Value("${wechat.finance.secret:1}")
     private String secret;
 
     /**
      * 会话私钥
      */
-    @Value("${wechat.finance.privateKey}")
+    @Value("${wechat.finance.privateKey:2}")
     private String privateKey;
 
     /**
      * 上传路径
      */
-    @Value("${wechat.finance.profile}")
+    @Value("${wechat.finance.profile:3}")
     private String profile;
 
     @Bean
